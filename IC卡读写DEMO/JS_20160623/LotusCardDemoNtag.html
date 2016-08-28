@@ -1,0 +1,57 @@
+﻿<HTML>
+<HEAD><TITLE>LotusCardDemo</TITLE></HEAD>
+<BODY>
+<OBJECT ID=LotusCardDriver Visible=false WIDTH=0 HEIGHT=0
+ CLASSID="CLSID:BD1874A5-3810-4639-8B70-3DDD607BAADB"> </OBJECT>
+
+<script language=javascript>
+
+function OnTest()
+{
+	var nHandle = 0; //设备句柄
+	var bResult = 0;
+	var strTextInfo = "";
+	nHandle	=	LotusCardDriver.OpenDevice("",0,0,0);
+	if(nHandle <=0 ) 
+	{
+		alert("打开设备失败!");
+		return;
+	}
+	LotusCardDriver.Beep(nHandle,10);
+  bResult = LotusCardDriver.SetCardType(nHandle, 'A');
+  if(bResult!=1)
+  {
+  	alert("设置卡类型失败!");
+  	LotusCardDriver.CloseDevice(nHandle);
+  	return;
+  }			
+	bResult = LotusCardDriver.GetCardNo(nHandle,38);
+  if(bResult!=1)
+  {
+  	alert("寻卡失败!");
+  	LotusCardDriver.CloseDevice(nHandle);
+  	return;
+  }	
+  alert("卡号:"+LotusCardDriver.CardNo);
+  LotusCardDriver.CardPassWord="FFFFFFFFFFFF";
+
+  //bResult = LotusCardDriver.WriteText(nHandle, 4, "春眠不觉晓处处蚊子咬夜来风雨声疙瘩知多少");
+  bResult = LotusCardDriver.WriteText(nHandle, 4, "这是一个测试文本这是一个测试文本");
+  if(bResult!=1)
+  {
+  	alert("扇区1写文本失败!");
+  	LotusCardDriver.CloseDevice(nHandle);
+  	return;  	
+  }  
+  strTextInfo = LotusCardDriver.ReadText(nHandle, 4);
+  alert("扇区1文本:"+strTextInfo);
+ 
+	LotusCardDriver.CloseDevice(nHandle);
+}
+
+</script>
+
+<!-- Insert HTML here -->
+<INPUT id=test type=button value="读卡器测试" onclick=OnTest()></BODY>
+</BODY>
+</HTML>
